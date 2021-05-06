@@ -1,0 +1,32 @@
+//Add this in manifest just above '</application>' closing tag
+----------------------------------------------------------------
+<provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_path">
+        </meta-data>
+</provider>
+
+
+// create @xml/provider_path file in res/xml 
+//add this line to it
+-----------------------------------------------
+<external-path name="external_files" path="." />
+
+
+Share Image/file/text using File Provider
+-------------------------------------------
+//add this to onclick
+//shares images to whatsapp,fb feed,fb story, gmail attachment and so on 
+
+File file = new File(imagePath);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getApplicationContext(),BuildConfig.APPLICATION_ID+".provider",file));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(intent, "Share using"));
